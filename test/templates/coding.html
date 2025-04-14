@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Coding Assistant</title>
+    <style>
+    .code-editor {
+        width: 100%;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        padding: 15px;
+        border: 2px solid #D8BFD8;
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: #4B0082;
+        resize: vertical;
+        min-height: 200px;
+    }
+
+    .code-editor:focus {
+        outline: none;
+        border-color: #9370DB;
+        box-shadow: 0 0 10px rgba(147, 112, 219, 0.2);
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <a href="{{ url_for('index') }}" class="nav-icon" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <h1>Coding Assistant</h1>
+            <a href="{{ url_for('knowledge') }}" class="nav-icon" title="Go to Knowledge Assistant">
+                <i class="fas fa-book"></i>
+            </a>
+        </div>
+
+        <!-- Problem Generation Form -->
+        <div class="problem-generator">
+            <h2>Generate Problem</h2>
+            <form method="POST">
+                <label for="topic">Enter Topic:</label>
+                <input type="text" id="topic" name="topic" required>
+                <button type="submit" name="generate_problem">Generate Problem</button>
+            </form>
+        </div>
+
+        <div class="problem-statement">
+            {% if problem %}
+                <h3>Problem Statement:</h3>
+                <pre>{{ problem }}</pre>
+                
+                {% if show_solution %}
+                    <button id="viewSolutionBtn" class="solution-btn" onclick="toggleSolution()">
+                        <i class="fas fa-lightbulb"></i> View Solution
+                    </button>
+                    <div id="solutionContainer" class="solution-container" style="display: none;">
+                        <h3>Solution:</h3>
+                        <pre class="solution-code">{{ solution }}</pre>
+                    </div>
+                {% endif %}
+                
+                <div class="attempts-counter">
+                    {% if attempts is defined and attempts < 3 %}
+                        Attempts remaining: {{ 3 - attempts }}
+                    {% else %}
+                        Click "View Solution" to see the correct answer
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Solution Submission Form -->
+        <div class="solution-submission">
+            <h2>Submit Solution</h2>
+            <form method="post" class="solution-form">
+                <div class="form-group">
+                    <label for="code">Your Solution:</label>
+                    <textarea id="code" 
+                              name="code" 
+                              rows="10" 
+                              class="code-editor"
+                              required>{% if submitted_code %}{{ submitted_code }}{% else %}{{ problem_data.template if problem_data and problem_data.template else "def find_most_stocked_book(inventory):\n    # Write your code here\n    # Return the title of the book with most copies\n    # If multiple books have same maximum copies, return the alphabetically first one\n    # Return None if inventory is empty\n    pass" }}{% endif %}</textarea>
+                </div>
+                <button type="submit" name="submit_solution" class="solution-btn">
+                    <i class="fas fa-play"></i> Run Solution
+                </button>
+            </form>
+            {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
+        </div>
+
+        {% if output_lines %}
+        <div class="response">
+            <h2>Evaluation Result:</h2>
+            <div class="scrollable-text">
+                {% for line in output_lines %}
+                    <div class="output-line {{ line.type }}">{{ line.content }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+    function toggleSolution() {
+        const solutionContainer = document.getElementById('solutionContainer');
+        const viewSolutionBtn = document.getElementById('viewSolutionBtn');
+        
+        if (solutionContainer.style.display === 'none') {
+            solutionContainer.style.display = 'block';
+            viewSolutionBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Solution';
+        } else {
+            solutionContainer.style.display = 'none';
+            viewSolutionBtn.innerHTML = '<i class="fas fa-lightbulb"></i> View Solution';
+        }
+    }
+    </script>
+</body>
+</html>

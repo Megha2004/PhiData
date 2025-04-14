@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Knowledge Assistant</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <a href="{{ url_for('index') }}" class="nav-icon" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <h1>Knowledge Assistant</h1>
+            <a href="{{ url_for('coding') }}" class="nav-icon" title="Go to Coding Practice">
+                <i class="fas fa-code"></i>
+            </a>
+        </div>
+
+        <form method="POST">
+            <label for="subject">Select Subject:</label>
+            <select name="subject" id="subject">
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="Deep Learning">Deep Learning</option>
+                <option value="Big Data Analytics">Big Data Analytics</option>
+                <option value="Text and Speech Analytics">Text and Speech Analytics</option>
+                <option value="Multivariate Data Analysis">Multivariate Data Analysis</option>
+                <option value="Data Science">Data Science</option>
+            </select>
+            
+            <label for="question">Enter your Question:</label>
+            <input type="text" id="question" name="question" required>
+            <button type="submit">Ask</button>
+        </form>
+
+        {% if response %}
+        <div class="response">
+            <h2>Response:</h2>
+            <div class="scrollable-text">
+                {{ response | safe }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

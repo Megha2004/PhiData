@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+    <h1>Course Forge AI</h1>
+    <div class="navigation-cards">
+        <!-- Knowledge Assistant -->
+        <a href="{{ url_for('knowledge') }}" class="nav-card">
+            <i class="fas fa-brain"></i>
+            <h2>Knowledge Assistant</h2>
+            <p>Get answers to your questions about various topics</p>
+        </a>
+
+        <!-- Coding Assistant -->
+        <a href="{{ url_for('coding') }}" class="nav-card">
+            <i class="fas fa-code"></i>
+            <h2>Coding Assistant</h2>
+            <p>Practice Python programming with interactive problems</p>
+        </a>
+
+        <!-- Flashcard Generator -->
+        <a href="{{ url_for('flashcards') }}" class="nav-card">
+            <i class="fas fa-clone"></i>
+            <h2>Flashcard Generator</h2>
+            <p>Create flashcards from your PDF documents</p>
+        </a>
+
+        <!-- Notes Assistant -->
+        <a href="{{ url_for('notes') }}" class="nav-card">
+            <i class="fas fa-book-open"></i>
+            <h2>Notes Assistant</h2>
+            <p>Access and study subject notes</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

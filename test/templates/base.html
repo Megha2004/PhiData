@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Assistant</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="header-container">
+        <a href="{{ url_for('index') }}" class="nav-icon">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="nav-links">
+            <a href="{{ url_for('knowledge') }}" class="nav-link">Knowledge Assistant</a>
+            <a href="{{ url_for('coding') }}" class="nav-link">Coding Assistant</a>
+            <a href="{{ url_for('flashcards') }}" class="nav-link">Flashcard Generator</a>
+            <a href="{{ url_for('notes') }}" class="nav-link">Notes Assistant</a>
+            <a href="{{ url_for('chatbot') }}" class="nav-link">AI Chatbot</a>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Optional: Add a footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Learning Assistant. All rights reserved.</p>
+    </footer>
+
+    <!-- Add this right before the closing body tag -->
+    <a href="{{ url_for('chatbot') }}" class="chat-float-button" id="chatButton">
+        <i class="fas fa-comments"></i>
+    </a>
+
+    <style>
+    .chat-float-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(145deg, #9370DB, #8A2BE2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 5px 15px rgba(147, 112, 219, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .chat-float-button i {
+        font-size: 24px;
+    }
+
+    .chat-float-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(147, 112, 219, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .chat-float-button {
+            bottom: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+    }
+    </style>
+</body>
+</html>

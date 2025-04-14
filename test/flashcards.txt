@@ -1,0 +1,22 @@
+What is the primary objective of the Machine Learning course (R17A0534) as stated in the provided text regarding hypothesis setting?;The primary objective is to acquire theoretical knowledge on setting hypotheses for pattern recognition.
+
+What is a second key objective of the Machine Learning course (R17A0534) concerning data handling and knowledge acquisition?;A second key objective is to apply suitable machine learning techniques for data handling and to gain knowledge from it.
+
+What is the third stated objective of the Machine Learning course (R17A0534) pertaining to algorithm performance and real-world applications?;The third objective is to evaluate the performance of algorithms and provide solutions for various real-world applications.
+
+Explain the overall purpose of the Machine Learning course (R17A0534) by synthesizing the stated objectives.;The overall purpose is to equip students with the theoretical understanding and practical skills to formulate hypotheses for pattern recognition, utilize machine learning techniques for data analysis and knowledge extraction, and evaluate the effectiveness of algorithms in solving real-world problems.
+
+What is the course code for Machine Learning as indicated in the provided text?;The course code is R17A0534.
+
+What academic year and semester does this Machine Learning course (R17A0534) belong to, according to the document?;It's a B.Tech IV Year – I Semester (R17) course, offered in the 2020-21 academic year.
+
+What department offers the Machine Learning course (R17A0534)?;The Department of Computer Science and Engineering offers the course.
+
+What institution provides this Machine Learning course (R17A0534)?;Malla Reddy College of Engineering & Technology (Autonomous Institution) provides the course.
+
+What is the credit value (C) assigned to the Machine Learning course (R17A0534)?;The course has a credit value of 3.
+
+Describe the lecture, tutorial, and practical components (L T/P/D) of the Machine Learning course (R17A0534) as listed in the provided text.;The course has 4 lecture hours, 1 tutorial hour, and no practical or drawing hours (4 1/-/- 3).  The '-' indicates the absence of those components.
+
+
+What is the core topic covered in Unit I of the Machine Learning course (R17A0534)?;Unit I covers an introduction to Machine Learning.

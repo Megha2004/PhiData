@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Simple vertical progress bar on the right -->
+<div class="side-progress">
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-text" id="progressText">0%</div>
+</div>
+
+<div class="container">
+    <div class="header-container">
+        <h1>Notes Assistant</h1>
+        {% if selected_subject %}
+        <a href="{{ url_for('notes') }}" class="nav-icon">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        {% endif %}
+    </div>
+
+    {% if not selected_subject %}
+    <div class="navigation-cards">
+        {% for code, subject in subjects.items() %}
+        <a href="{{ url_for('notes', subject=code) }}" class="nav-card">
+            <i class="{{ subject.icon }}"></i>
+            <h2>{{ subject.name }}</h2>
+            <p>{{ subject.description }}</p>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if selected_subject and notes %}
+    <div class="notes-content" id="notesContent">
+        <div class="subject-header">
+            <h2>{{ subjects[selected_subject].name }}</h2>
+        </div>
+        {% for lesson in notes %}
+        <div class="lesson-container" id="lesson{{ lesson.lesson_num }}" data-lesson="{{ lesson.lesson_num }}">
+            <h3 class="lesson-title">Lesson {{ lesson.lesson_num }}</h3>
+            
+            {% for module in lesson.modules %}
+            <div class="module-container">
+                <h4 class="module-title">{{ module.title }}</h4>
+                <div class="topics-container">
+                    {% for topic in module.topics %}
+                    <div class="topic-item">
+                        {{ topic }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% elif selected_subject %}
+    <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>No notes available for this subject.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Progress bar styles */
+.side-progress {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 400px;
+    background: #E6E6FA;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #8A2BE2;
+    border-radius: 5px;
+    transition: height 0.3s ease;
+}
+
+.progress-text {
+    position: absolute;
+    right: 20px;
+    top: -30px;
+    background: #8A2BE2;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Adjust main content to make room for progress bar */
+.container {
+    padding-right: 60px;
+}
+
+.notes-content {
+    margin: 20px 0;
+}
+
+.subject-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(145deg, #E6E6FA, #D8BFD8);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(147, 112, 219, 0.1);
+}
+
+.subject-header h2 {
+    color: #4B0082;
+    margin: 0;
+}
+
+.lesson-container {
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(147, 112, 219, 0.1);
+    overflow: hidden;
+}
+
+.lesson-title {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    font-size: 1.5em;
+}
+
+.module-container {
+    padding: 20px;
+    border-bottom: 1px solid #E6E6FA;
+}
+
+.module-title {
+    color: #9370DB;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #E6E6FA;
+}
+
+.topics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.topic-item {
+    background: linear-gradient(145deg, #ffffff, #E6E6FA);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(147, 112, 219, 0.05);
+    transition: all 0.3s ease;
+    line-height: 1.6;
+    font-size: 1em;
+    color: #4B0082;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.topic-item:hover {
+    transform: translateX(5px);
+    background: linear-gradient(145deg, #E6E6FA, #D8BFD8);
+}
+
+.error-message {
+    text-align: center;
+    padding: 50px;
+    color: #9370DB;
+}
+
+.error-message i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .module-container {
+        padding: 15px;
+    }
+    
+    .topic-item {
+        padding: 15px;
+        font-size: 0.95em;
+    }
+    
+    .lesson-title {
+        font-size: 1.3em;
+        padding: 15px;
+    }
+    
+    .module-title {
+        font-size: 1.2em;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const lessonContainers = document.querySelectorAll('.lesson-container');
+    const totalLessons = lessonContainers.length;
+    
+    if (totalLessons === 0) return;
+
+    function updateProgress() {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrolled = window.scrollY;
+        
+        const progress = (scrolled / (documentHeight - windowHeight)) * 100;
+        const clampedProgress = Math.min(100, Math.max(0, progress));
+        
+        progressBar.style.height = `${clampedProgress}%`;
+        progressText.textContent = `${Math.round(clampedProgress)}%`;
+    }
+
+    // Initial progress update
+    updateProgress();
+
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+});
+</script>
+{% endblock %}

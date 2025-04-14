@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h2><i class="fas fa-robot"></i> AI Assistant</h2>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.type == 'user' %}
+                <div class="message user-message">
+                    <div class="message-content">
+                        <p>{{ message.text }}</p>
+                    </div>
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                {% else %}
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        {{ message.text | safe }}
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="message bot-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="chat-input">
+        <form method="post" id="chatForm">
+            <input type="text" 
+                   name="user_message" 
+                   placeholder="Type your message here..."
+                   required
+                   autocomplete="off">
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+    <style>
+        .chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 380px;
+    height: 600px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px rgba(147, 112, 219, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+        
+        .chat-header {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+            color: white;
+    padding: 15px 20px;
+            text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    gap: 10px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+    padding: 20px;
+            display: flex;
+            flex-direction: column;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 80%;
+}
+
+.bot-message {
+    align-self: flex-start;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bot-message .message-avatar {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    color: white;
+}
+
+.user-message .message-avatar {
+    background: linear-gradient(145deg, #E6E6FA, #D8BFD8);
+    color: #9370DB;
+}
+
+.message-content {
+    background: linear-gradient(145deg, #ffffff, #E6E6FA);
+    padding: 12px 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(147, 112, 219, 0.1);
+}
+
+.user-message .message-content {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    color: white;
+}
+
+.message-content p {
+    margin: 0;
+    line-height: 1.5;
+        }
+        
+        .chat-input {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid rgba(147, 112, 219, 0.1);
+    position: relative;
+    z-index: 2;
+        }
+        
+        .chat-input form {
+            display: flex;
+    gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+    padding: 12px;
+    border: 2px solid #E6E6FA;
+            border-radius: 25px;
+    font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+    outline: none;
+            border-color: #9370DB;
+        }
+        
+        .chat-input button {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+            color: white;
+            border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+        }
+        
+        .chat-input button:hover {
+    transform: scale(1.1);
+}
+
+/* Scrollbar styling */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #E6E6FA;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #9370DB;
+    border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .chat-container {
+                width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+            }
+        }
+
+@media (max-height: 700px) {
+    .chat-container {
+        height: 500px;
+    }
+}
+
+/* Chat float button styles */
+.chat-float-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(147, 112, 219, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.chat-float-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(147, 112, 219, 0.4);
+}
+
+/* Add smooth scrolling for chat messages */
+.chat-messages {
+    scroll-behavior: smooth;
+}
+
+/* Ensure chat input stays at bottom */
+.chat-input {
+    background: white;
+    padding: 15px;
+    border-top: 1px solid rgba(147, 112, 219, 0.1);
+}
+
+.chat-input form {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #E6E6FA;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.chat-input button {
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Message styles */
+.message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 5px 0;
+}
+
+.bot-message {
+    align-self: flex-start;
+    background: linear-gradient(145deg, #E6E6FA, #D8BFD8);
+    color: #4B0082;
+}
+
+.user-message {
+    align-self: flex-end;
+    background: linear-gradient(145deg, #9370DB, #8A2BE2);
+    color: white;
+}
+    </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatForm = document.querySelector('.chat-input form');
+    
+    // Scroll to bottom when new messages are added
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Scroll to bottom initially
+    scrollToBottom();
+    
+    // Scroll to bottom when form is submitted
+    chatForm.addEventListener('submit', function() {
+        setTimeout(scrollToBottom, 100);
+    });
+});
+    </script>
+{% endblock %} 

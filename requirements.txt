@@ -8,3 +8,6 @@ streamlit
 onnxruntime
 agno
 google-genai
+flask
+lancedb
+chromadb
